@@ -1,4 +1,6 @@
 import httpx
+import time
+
 
 API_URL = "https://data.ny.gov/resource/7vem-aaz7.json"
 
@@ -22,3 +24,14 @@ def fetch_page(roll_year:int, limit: int= 100, offset: int = 0, municipality_nam
     response = httpx.get(API_URL, params= params, timeout=60)
     response.raise_for_status()
     return response.json()
+
+def fetch_all(roll_year: int, page_size: int = 5000, pause_sec: float = 0.5):
+    offset = 0
+    while True: 
+        page = fetch_page(roll_year, limit= page_size, offset=offset)
+        if not page:
+            return
+        yield from page
+        
+        offset += page_size
+        time.sleep(pause_sec)
