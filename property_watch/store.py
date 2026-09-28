@@ -12,7 +12,7 @@ INSERT INTO parcels (
 )
 ON CONFLICT (print_key_code, roll_year) DO UPDATE SET
     owner_name              =EXCLUDED.owner_name,
-    full_market_value       =EXCLUDED.full_market,
+    full_market_value       =EXCLUDED.full_market_value,
     assessment_land         =EXCLUDED.assessment_land,
     assessment_total        =EXCLUDED.assessment_total,
     fetched_at              =now()
