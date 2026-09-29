@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS parcels (
     municipality_name   VARCHAR(100),
     swis_code           VARCHAR(10),
     property_class      VARCHAR(10),
-    property_class_desc VARCHAR(120),
+    property_class_desc VARCHAR(200),
     address_number      VARCHAR(20),
     address_street      VARCHAR(120),
     owner_name          VARCHAR(200),
