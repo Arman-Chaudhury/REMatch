@@ -13,7 +13,13 @@ def main(argv: list[str]) -> None:
         print("schema ready")
     elif command == "load":
             print("stored", load_year(int(argv[1])))
-    
+    elif command == "diff":
+        from property_watch.diff import find_changes
+        from property_watch.changes import save_changes
+        year = int(argv[1])
+        changes = find_changes(year - 1, year)
+        print("changes found:", len(changes))
+        print("new records:", save_changes(changes, year))
     else:
         print("commands: init")
 

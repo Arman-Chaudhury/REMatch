@@ -16,4 +16,21 @@ CREATE TABLE IF NOT EXISTS parcels (
     PRIMARY KEY (print_key_code, roll_year)
 );
 
-CREATE INDEX IF NOT EXISTS parcels_municipality_idx ON parcels (municipality_name, roll_year)
+CREATE INDEX IF NOT EXISTS parcels_municipality_idx ON parcels (municipality_name, roll_year);
+
+CREATE TABLE IF NOT EXISTS changes(
+    id                  SERIAL PRIMARY KEY,
+    print_key_code      VARCHAR(40)  NOT NULL,
+    roll_year           INTEGER      NOT NULL,
+    kind                VARCHAR(30)  NOT NULL,
+    municipality    VARCHAR(100),
+    address         VARCHAR(160),
+    old_value       VARCHAR(200),
+    new_value       VARCHAR(200),
+    pct             NUMERIC(8,1),
+    title           VARCHAR(300) NOT NULL,
+    summary         TEXT         NOT NULL,
+    impact          VARCHAR(10)  NOT NULL,
+    detected_at     TIMESTAMPTZ  NOT NULL DEFAULT now(),
+    UNIQUE (print_key_code, roll_year, kind)
+);
