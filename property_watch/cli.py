@@ -20,6 +20,17 @@ def main(argv: list[str]) -> None:
         changes = find_changes(year - 1, year)
         print("changes found:", len(changes))
         print("new records:", save_changes(changes, year))
+    elif command == "update":
+        from datetime import date
+        from property_watch.diff import find_changes
+        from property_watch.changes import save_changes
+        year = date.today().year
+        stored = load_year(year)
+        if stored == 0:
+            print(f"{year} roll not published yet")
+        else:
+            changes = find_changes(year - 1, year)
+            print(f"{year}: {len(changes)} changes, {save_changes(changes, year)} new records")
     else:
         print("commands: init")
 
