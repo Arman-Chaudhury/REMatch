@@ -55,3 +55,14 @@ CREATE TABLE IF NOT EXISTS notifications (
     created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
     UNIQUE (watch_id, change_id)
 );
+
+CREATE TABLE IF NOT EXISTS sales (
+    print_key_code  VARCHAR(40)  NOT NULL,
+    sale_date       DATE         NOT NULL,
+    price           BIGINT,
+    book            VARCHAR(10)  NOT NULL,
+    page            VARCHAR(10)  NOT NULL,
+    condition       VARCHAR(100),
+    fetched_at      TIMESTAMPTZ  NOT NULL DEFAULT now(),
+    PRIMARY KEY (print_key_code, sale_date, book, page)
+);

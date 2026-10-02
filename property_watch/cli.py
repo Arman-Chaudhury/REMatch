@@ -42,9 +42,19 @@ def main(argv: list[str]) -> None:
         from property_watch.match import pending
         for n in pending():
             print(f"[{n['impact']}] {n['email']}: {n['title']}")
+    elif command == "sales":
+        from property_watch.lrv import fetch_sales, save_sales, watched_sold_parcels
+        keys = argv[1:] or watched_sold_parcels()
+        if not keys:
+            print("no watched parcels have changed owner; run match first")
+        for key, sales in fetch_sales(keys):
+            print(f"{key}: {len(sales)} sales, {save_sales(key, sales)} new")
+            for s in sales:
+                price = f"${s['price']:,}" if s["price"] else "n/a"
+                print(f"  {s['sale_date']}  {price}  {s['condition'] or ''}")
     else:
         print('commands: init, load YEAR, diff YEAR, update, '
-              'watch add EMAIL "ADDRESS" [TOWN], match, pending')
+              'watch add EMAIL "ADDRESS" [TOWN], match, pending, sales [PRINT_KEY ...]')
 
 def load_year(roll_year: int, batch: int = 5000) -> int:
     total, buffer = 0, []

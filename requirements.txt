@@ -1,3 +1,4 @@
 httpx
 psycopg2-binary
 pytest
+beautifulsoup4
