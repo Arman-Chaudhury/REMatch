@@ -17,7 +17,7 @@ def fetch_page(roll_year:int, limit: int= 100, offset: int = 0, municipality_nam
         "county_name": "Nassau",
         "roll_year":str(roll_year),
         "$select": ",".join(FIELDS),
-        "$order":"print_key_code",
+        "$order":":id",
         "$limit":str(limit), 
         "$offset": str(offset),
         
@@ -37,6 +37,12 @@ def fetch_page(roll_year:int, limit: int= 100, offset: int = 0, municipality_nam
                 raise
             delay = 2 ** attempt
             print(f"HTTP {status}; retrying in {delay}s", flush = True)
+            time.sleep(delay)
+        except httpx.TimeoutException:
+            if attempt == attempts -1:
+                raise
+            delay = 2 ** attempt
+            print(f"timeout; retrying in {delay}s", flush = True)
             time.sleep(delay)
 
 def fetch_all(roll_year: int, page_size: int = 5000, pause_sec: float = 0.5):

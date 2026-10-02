@@ -2,20 +2,24 @@ from dataclasses import dataclass
 
 from property_watch.db import cursor
 
+
 PAIR_SQL = """
-SELECT new.print_key_code, new.municipality_name,
+SELECT new.swis_code, new.print_key_code, new.municipality_name,
        new.address_number, new.address_street,
        old.owner_name        AS old_owner,   new.owner_name        AS new_owner,
        old.assessment_total  AS old_assess,  new.assessment_total  AS new_assess
 FROM parcels new
 LEFT JOIN parcels old
-       ON old.print_key_code = new.print_key_code AND old.roll_year = %(old_year)s
+       ON old.swis_code = new.swis_code
+      AND old.print_key_code = new.print_key_code
+      AND old.roll_year = %(old_year)s
 WHERE new.roll_year = %(new_year)s
 """
 
 
 @dataclass
 class Change:
+    swis_code: str
     print_key_code: str
     kind: str
     address: str
@@ -34,7 +38,7 @@ def _pct(old, new) -> float | None:
 def classify(pair: dict, threshold_pct: float = 10.0) -> list[Change]:
     """Pure function: one joined row in, zero or more Changes out."""
     address = f"{pair.get('address_number') or ''} {pair.get('address_street') or ''}".strip()
-    base = dict(print_key_code=pair["print_key_code"], address=address,
+    base = dict(swis_code=pair["swis_code"], print_key_code=pair["print_key_code"], address=address,
                 municipality=pair.get("municipality_name") or "")
     out: list[Change] = []
 

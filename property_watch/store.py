@@ -1,5 +1,6 @@
 from property_watch.db import cursor
 
+
 UPSERT_SQL = """
 INSERT INTO parcels (
     print_key_code, roll_year, municipality_name, swis_code, 
@@ -10,7 +11,7 @@ INSERT INTO parcels (
     %(property_class)s, %(property_class_desc)s, %(address_number)s, %(address_street)s,
     %(owner_name)s, %(zip)s, %(full_market_value)s, %(assessment_land)s, %(assessment_total)s
 )
-ON CONFLICT (print_key_code, roll_year) DO UPDATE SET
+ON CONFLICT (swis_code, print_key_code, roll_year) DO UPDATE SET
     owner_name              =EXCLUDED.owner_name,
     full_market_value       =EXCLUDED.full_market_value,
     assessment_land         =EXCLUDED.assessment_land,

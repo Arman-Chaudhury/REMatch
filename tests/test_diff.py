@@ -2,7 +2,7 @@ from property_watch.diff import classify
 
 
 def pair(**overrides):
-    base = dict(print_key_code="1-2-3", municipality_name="Glen Cove",
+    base = dict(swis_code="280600", print_key_code="1-2-3", municipality_name="Glen Cove",
                 address_number="26", address_street="CROW LA",
                 old_owner="SMITH", new_owner="SMITH",
                 old_assess=100_000, new_assess=100_000)
@@ -18,6 +18,11 @@ def test_owner_change_detected():
     assert c.kind == "owner_changed"
     assert c.old_value == "SMITH" and c.new_value == "JONES"
     assert c.address == "26 CROW LA"
+
+
+def test_change_keeps_town_code():
+    (c,) = classify(pair(new_owner="JONES"))
+    assert (c.swis_code, c.print_key_code) == ("280600", "1-2-3")
 
 
 def test_assessment_rise_over_threshold():

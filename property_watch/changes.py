@@ -3,13 +3,13 @@ from property_watch.diff import Change
 
 INSERT_SQL = """
 INSERT INTO changes (
-    print_key_code, roll_year, kind, municipality, address,
+    swis_code, print_key_code, roll_year, kind, municipality, address,
     old_value, new_value, pct, title, summary, impact
 ) VALUES (
-    %(print_key_code)s, %(roll_year)s, %(kind)s, %(municipality)s, %(address)s,
+    %(swis_code)s, %(print_key_code)s, %(roll_year)s, %(kind)s, %(municipality)s, %(address)s,
     %(old_value)s, %(new_value)s, %(pct)s, %(title)s, %(summary)s, %(impact)s
 )
-ON CONFLICT (print_key_code, roll_year, kind) DO NOTHING
+ON CONFLICT (swis_code, print_key_code, roll_year, kind) DO NOTHING
 """
 
 def describe(c: Change, new_year: int) -> tuple[str, str, str]:
@@ -36,7 +36,8 @@ def save_changes(changes: list[Change], new_year: int) -> int:
         for c in changes:
             title, summary, impact = describe(c, new_year)
             cur.execute(INSERT_SQL, {
-                "print_key_code": c.print_key_code, "roll_year": new_year, "kind": c.kind,
+                "swis_code": c.swis_code, "print_key_code": c.print_key_code,
+                "roll_year": new_year, "kind": c.kind,
                 "municipality": c.municipality or None, "address": c.address or None,
                 "old_value": c.old_value, "new_value": c.new_value, "pct": c.pct,
                 "title": title[:300], "summary": summary, "impact": impact,
