@@ -1,12 +1,14 @@
+from property_watch.address import normalize
 from property_watch.db import cursor
 from property_watch.diff import Change
 
 INSERT_SQL = """
 INSERT INTO changes (
-    swis_code, print_key_code, roll_year, kind, municipality, address,
+    swis_code, print_key_code, roll_year, kind, municipality, address, address_key,
     old_value, new_value, pct, title, summary, impact
 ) VALUES (
     %(swis_code)s, %(print_key_code)s, %(roll_year)s, %(kind)s, %(municipality)s, %(address)s,
+    %(address_key)s,
     %(old_value)s, %(new_value)s, %(pct)s, %(title)s, %(summary)s, %(impact)s
 )
 ON CONFLICT (swis_code, print_key_code, roll_year, kind) DO NOTHING
@@ -39,6 +41,7 @@ def save_changes(changes: list[Change], new_year: int) -> int:
                 "swis_code": c.swis_code, "print_key_code": c.print_key_code,
                 "roll_year": new_year, "kind": c.kind,
                 "municipality": c.municipality or None, "address": c.address or None,
+                "address_key": normalize(c.address) if c.address else None,
                 "old_value": c.old_value, "new_value": c.new_value, "pct": c.pct,
                 "title": title[:300], "summary": summary, "impact": impact,
             })

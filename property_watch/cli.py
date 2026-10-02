@@ -1,9 +1,8 @@
 import sys
 from property_watch.store import store_rows
 from property_watch.fetch import fetch_all
-
-
 from property_watch.db import init_schema
+
 
 
 def main(argv: list[str]) -> None:
@@ -31,8 +30,21 @@ def main(argv: list[str]) -> None:
         else:
             changes = find_changes(year - 1, year)
             print(f"{year}: {len(changes)} changes, {save_changes(changes, year)} new records")
+    elif command == "watch" and argv[1:2] == ["add"]:
+        from property_watch.match import add_watch
+        email, address = argv[2], argv[3]
+        town = argv[4] if len(argv) > 4 else None
+        print("watch id:", add_watch(email, address, town))
+    elif command == "match":
+        from property_watch.match import run_matching
+        print("new notifications:", run_matching())
+    elif command == "pending":
+        from property_watch.match import pending
+        for n in pending():
+            print(f"[{n['impact']}] {n['email']}: {n['title']}")
     else:
-        print("commands: init")
+        print('commands: init, load YEAR, diff YEAR, update, '
+              'watch add EMAIL "ADDRESS" [TOWN], match, pending')
 
 def load_year(roll_year: int, batch: int = 5000) -> int:
     total, buffer = 0, []

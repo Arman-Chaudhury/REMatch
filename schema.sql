@@ -35,3 +35,23 @@ CREATE TABLE IF NOT EXISTS changes(
     detected_at     TIMESTAMPTZ  NOT NULL DEFAULT now(),
     UNIQUE (swis_code, print_key_code, roll_year, kind)
 );
+
+CREATE TABLE IF NOT EXISTS watches (
+    id            SERIAL PRIMARY KEY,
+    email         VARCHAR(200) NOT NULL,
+    address       VARCHAR(160) NOT NULL,
+    address_key   VARCHAR(160) NOT NULL,
+    municipality  VARCHAR(100),
+    created_at    TIMESTAMPTZ  NOT NULL DEFAULT now()
+);
+
+ALTER TABLE changes ADD COLUMN IF NOT EXISTS address_key VARCHAR(160);
+CREATE INDEX IF NOT EXISTS changes_address_key_idx ON changes (address_key);
+
+CREATE TABLE IF NOT EXISTS notifications (
+    id          SERIAL PRIMARY KEY,
+    watch_id    INTEGER NOT NULL REFERENCES watches(id),
+    change_id   INTEGER NOT NULL REFERENCES changes(id),
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (watch_id, change_id)
+);
