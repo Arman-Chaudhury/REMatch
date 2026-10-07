@@ -1,8 +1,12 @@
 import sys
+
+from dotenv import load_dotenv
+
 from property_watch.store import store_rows
 from property_watch.fetch import fetch_all
 from property_watch.db import init_schema
 
+load_dotenv()
 
 
 def main(argv: list[str]) -> None:
@@ -30,6 +34,11 @@ def main(argv: list[str]) -> None:
         else:
             changes = find_changes(year - 1, year)
             print(f"{year}: {len(changes)} changes, {save_changes(changes, year)} new records")
+            from property_watch.match import run_matching
+            from property_watch.lrv import fetch_sales, save_sales, watched_sold_parcels
+            print("new notifications:", run_matching())
+            for key, sales in fetch_sales(watched_sold_parcels()):
+                print(f"{key}: {save_sales(key, sales)} new sales")
     elif command == "watch" and argv[1:2] == ["add"]:
         from property_watch.match import add_watch
         email, address = argv[2], argv[3]
@@ -52,9 +61,13 @@ def main(argv: list[str]) -> None:
             for s in sales:
                 price = f"${s['price']:,}" if s["price"] else "n/a"
                 print(f"  {s['sale_date']}  {price}  {s['condition'] or ''}")
+    elif command == "notify":
+        from property_watch.notify import send_pending
+        print("emails sent:", send_pending(send="--send" in argv))
     else:
         print('commands: init, load YEAR, diff YEAR, update, '
-              'watch add EMAIL "ADDRESS" [TOWN], match, pending, sales [PRINT_KEY ...]')
+              'watch add EMAIL "ADDRESS" [TOWN], match, pending, sales [PRINT_KEY ...], '
+              'notify [--send]')
 
 def load_year(roll_year: int, batch: int = 5000) -> int:
     total, buffer = 0, []

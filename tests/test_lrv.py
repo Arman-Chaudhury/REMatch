@@ -23,6 +23,10 @@ def test_sbl_lettered_lot():
     assert to_sbl("46.-579-16.C") == "46579  0016C"
 
 
+def test_sbl_glen_cove_city_roll_format():
+    assert to_sbl("21-224.-1") == to_sbl("21.-224-1") == "21224  00010"
+
+
 SALES_HTML = """
 <div class="tab-pane" id="infosalestab"><table><tbody>
   <tr><td>08/29/2023</td><td>$720,000</td><td>14416</td><td>0912</td><td>OTHER UNUSUAL FACTORS</td></tr>

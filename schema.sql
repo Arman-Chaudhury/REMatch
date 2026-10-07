@@ -66,3 +66,5 @@ CREATE TABLE IF NOT EXISTS sales (
     fetched_at      TIMESTAMPTZ  NOT NULL DEFAULT now(),
     PRIMARY KEY (print_key_code, sale_date, book, page)
 );
+
+ALTER TABLE notifications ADD COLUMN IF NOT EXISTS sent_at TIMESTAMPTZ;
