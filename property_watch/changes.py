@@ -36,12 +36,13 @@ def describe(c: Change, new_year: int) -> tuple[str, str, str]:
             ),
             "high" if abs(c.pct) >= 25 else "medium",
         )
+    if c.new_value is None:
+        assessed = "assessed value not yet listed"
+    else:
+        assessed = f"assessed at ${int(c.new_value):,}"
     return (
         f"New parcel on the {new_year} roll: {where}",
-        (
-            f"{where} appears for the first time on the {new_year} assessment roll "
-            f"(assessed at ${int(c.new_value or 0):,})."
-        ),
+        f"{where} appears for the first time on the {new_year} assessment roll ({assessed}).",
         "low",
     )
 

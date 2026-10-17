@@ -46,8 +46,14 @@ def classify(pair: dict, threshold_pct: float = 10.0) -> list[Change]:
     out: list[Change] = []
 
     if pair["old_assess"] is None and pair["old_owner"] is None:
+        new_assess = pair["new_assess"]
         return [
-            Change(kind="new_parcel", old_value=None, new_value=str(pair["new_assess"]), **base)
+            Change(
+                kind="new_parcel",
+                old_value=None,
+                new_value=None if new_assess is None else str(new_assess),
+                **base,
+            )
         ]
 
     pct = _pct(pair["old_assess"], pair["new_assess"])
@@ -55,8 +61,8 @@ def classify(pair: dict, threshold_pct: float = 10.0) -> list[Change]:
         out.append(
             Change(
                 kind="assessment_up" if pct > 0 else "assessment_down",
-                old_value=str(pair["old_assess"]),
-                new_value=str(pair["new_assess"]),
+                old_value=None if pair["old_assess"] is None else str(pair["old_assess"]),
+                new_value=None if pair["new_assess"] is None else str(pair["new_assess"]),
                 pct=pct,
                 **base,
             )

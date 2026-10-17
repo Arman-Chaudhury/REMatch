@@ -1,3 +1,4 @@
+from property_watch.changes import describe
 from property_watch.diff import classify
 
 
@@ -44,6 +45,26 @@ def test_small_move_ignored():
 def test_new_parcel():
     (c,) = classify(pair(old_owner=None, old_assess=None))
     assert c.kind == "new_parcel"
+
+
+def test_new_parcel_without_assessment_has_none_value():
+    (c,) = classify(pair(old_owner=None, old_assess=None, new_assess=None))
+    assert c.kind == "new_parcel"
+    assert c.new_value is None
+
+
+def test_describe_new_parcel_without_assessment_does_not_raise():
+    (c,) = classify(pair(old_owner=None, old_assess=None, new_assess=None))
+    title, summary, _ = describe(c, 2025)
+    assert title.startswith("New parcel on the 2025 roll")
+    assert "$0" not in summary and "None" not in summary
+    assert "not yet listed" in summary
+
+
+def test_describe_new_parcel_with_assessment():
+    (c,) = classify(pair(old_owner=None, old_assess=None, new_assess=250_000))
+    _, summary, _ = describe(c, 2025)
+    assert "assessed at $250,000" in summary
 
 
 def test_owner_and_assessment_both_change():
