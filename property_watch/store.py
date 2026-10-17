@@ -1,6 +1,5 @@
 from property_watch.db import cursor
 
-
 UPSERT_SQL = """
 INSERT INTO parcels (
     print_key_code, roll_year, municipality_name, swis_code, 
@@ -19,13 +18,15 @@ ON CONFLICT (swis_code, print_key_code, roll_year) DO UPDATE SET
     fetched_at              =now()
 """
 
+
 def _int(value) -> int | None:
     try:
         return int(float(value)) if value not in (None, "") else None
     except (TypeError, ValueError):
         return None
 
-def to_row(api: dict) -> dict: 
+
+def to_row(api: dict) -> dict:
     return {
         "print_key_code": api["print_key_code"],
         "roll_year": _int(api["roll_year"]),
@@ -35,12 +36,13 @@ def to_row(api: dict) -> dict:
         "property_class_desc": api.get("property_class_description"),
         "address_number": api.get("parcel_address_number"),
         "address_street": api.get("parcel_address_street"),
-        "owner_name":api.get("primary_owner_last_name"),
+        "owner_name": api.get("primary_owner_last_name"),
         "zip": api.get("mailing_address_zip"),
         "full_market_value": api.get("full_market_value"),
         "assessment_land": _int(api.get("assessment_land")),
-        "assessment_total": _int(api.get("assessment_total"))
+        "assessment_total": _int(api.get("assessment_total")),
     }
+
 
 def store_rows(api_rows: list[dict]) -> int:
     rows = [to_row(r) for r in api_rows if r.get("print_key_code")]
