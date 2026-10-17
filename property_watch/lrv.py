@@ -53,20 +53,23 @@ def parse_sales(html: str) -> list[dict]:
         except ValueError:
             continue
         digits = re.sub(r"\D", "", price)
-        sales.append({
-            "sale_date": sale_date,
-            "price": int(digits) if digits else None,
-            "book": book,
-            "page": page,
-            "condition": condition or None,
-        })
+        sales.append(
+            {
+                "sale_date": sale_date,
+                "price": int(digits) if digits else None,
+                "book": book,
+                "page": page,
+                "condition": condition or None,
+            }
+        )
     return sales
 
 
 def fetch_sales(print_keys: list[str], pause_sec: float = 3.0):
     headers = {"User-Agent": USER_AGENT}
-    with httpx.Client(base_url=BASE_URL, headers=headers,
-                      follow_redirects=True, timeout=30) as client:
+    with httpx.Client(
+        base_url=BASE_URL, headers=headers, follow_redirects=True, timeout=30
+    ) as client:
         client.get("/")
         for key in print_keys:
             try:

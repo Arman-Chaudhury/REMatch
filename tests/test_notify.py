@@ -3,7 +3,10 @@ from property_watch.notify import build_message
 
 def test_one_email_lists_every_change():
     items = [
-        {"title": "Ownership change recorded for 16 PUTNAM AVE, Glen Cove", "summary": "New owner."},
+        {
+            "title": "Ownership change recorded for 16 PUTNAM AVE, Glen Cove",
+            "summary": "New owner.",
+        },
         {"title": "Assessment rose 30% at 26 CROW LN, Glen Cove", "summary": "Value rose."},
     ]
     msg = build_message("watcher@example.com", items)

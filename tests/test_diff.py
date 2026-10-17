@@ -2,10 +2,17 @@ from property_watch.diff import classify
 
 
 def pair(**overrides):
-    base = dict(swis_code="280600", print_key_code="1-2-3", municipality_name="Glen Cove",
-                address_number="26", address_street="CROW LA",
-                old_owner="SMITH", new_owner="SMITH",
-                old_assess=100_000, new_assess=100_000)
+    base = {
+        "swis_code": "280600",
+        "print_key_code": "1-2-3",
+        "municipality_name": "Glen Cove",
+        "address_number": "26",
+        "address_street": "CROW LA",
+        "old_owner": "SMITH",
+        "new_owner": "SMITH",
+        "old_assess": 100_000,
+        "new_assess": 100_000,
+    }
     return {**base, **overrides}
 
 
