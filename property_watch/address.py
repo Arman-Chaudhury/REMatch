@@ -4,11 +4,13 @@ import re
 
 # Every spelling -> the form the roll uses most (checked against 2025 data).
 SUFFIXES = {
-    "AVENUE": "AVE", "AV": "AVE",
+    "AVENUE": "AVE",
+    "AV": "AVE",
     "STREET": "ST",
     "ROAD": "RD",
     "DRIVE": "DR",
-    "LANE": "LN", "LA": "LN",
+    "LANE": "LN",
+    "LA": "LN",
     "PLACE": "PL",
     "BOULEVARD": "BLVD",
     "COURT": "CT",

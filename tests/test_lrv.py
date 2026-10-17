@@ -37,8 +37,13 @@ SALES_HTML = """
 
 def test_parse_sales():
     first, second = parse_sales(SALES_HTML)
-    assert first == {"sale_date": date(2023, 8, 29), "price": 720_000,
-                     "book": "14416", "page": "0912", "condition": "OTHER UNUSUAL FACTORS"}
+    assert first == {
+        "sale_date": date(2023, 8, 29),
+        "price": 720_000,
+        "book": "14416",
+        "page": "0912",
+        "condition": "OTHER UNUSUAL FACTORS",
+    }
     assert second["price"] == 0 and second["condition"] is None
 
 

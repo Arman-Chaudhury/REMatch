@@ -10,7 +10,7 @@ uv venv -p 3.12 .venv && uv pip install -p .venv/bin/python -r requirements.txt 
 .venv/bin/ruff check . && .venv/bin/ruff format --check .
 ```
 Use the project-local `.venv` only. Never install globally. The old `venv/` folder is broken and ignored.
-There is no CI yet. Live data (data.ny.gov, the Land Records Viewer, email sending) must never be hit from tests.
+CI (.github/workflows/ci.yml) runs ruff check, ruff format --check and pytest on every push and PR. Live data (data.ny.gov, the Land Records Viewer, email sending) must never be hit from tests.
 
 ## Agent fleet
 Before any work, read DIRECTION.md at the repo root and follow its rules. Proposals and logs go there, never in commits to main.
