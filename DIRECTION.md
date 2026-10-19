@@ -20,7 +20,6 @@ Turn REMatch from a working script into something a Nassau County neighbor could
 - Debug first: if tests or CI fail, fixing that is the first task of the iteration.
 - Only act on items in "Decisions made" or "Current goal". Anything else goes in "Proposals".
 - Inspiration is welcome: look at comparable GitHub projects, products, papers, or ideas, and cite links in the proposal. Never copy code with an incompatible license.
-- No attribution trailers in commits or PRs.
 
 ## Proposals (agents write here, Arman decides)
 <!-- Format: - [ ] Short title. Why it helps. Rough size (S/M/L). Links to inspiration if any. -->

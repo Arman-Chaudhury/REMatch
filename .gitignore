@@ -3,3 +3,4 @@ venv/
 __pycache__/
 update.log
 .venv/
+CLAUDE.local.md
